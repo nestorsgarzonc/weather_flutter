@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_flutter/services/weather.dart';
 import 'package:weather_flutter/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -9,18 +10,17 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  WeatherModel weatherModel = WeatherModel();
+  var temperature;
+  int condition;
+  String cityName;
+  String weatherIcon;
+  String weatherMessage;
+
   @override
   void initState() {
     super.initState();
     updateUI(widget.locationScreen);
-  }
-  var temperature;
-  int condition;
-  String cityName;
-  void updateUI(dynamic weatherData){
-    temperature=weatherData['main']['temp'];
-    condition=weatherData['weather'][0]['id'];
-    cityName=weatherData['name'];
   }
 
   @override
@@ -44,6 +44,7 @@ class _LocationScreenState extends State<LocationScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   FlatButton(
                     child: Icon(Icons.near_me, size: 50.0),
@@ -60,22 +61,32 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: <Widget>[
                     Text('$temperature°', style: kTempTextStyle),
-                    Text('☀️', style: kConditionTextStyle),
+                    Text(weatherIcon, style: kConditionTextStyle),
                   ],
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "$cityName ",
+                  ('$weatherMessage in $cityName'),
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void updateUI(dynamic weatherData) {
+    setState(() {
+      temperature = weatherData['main']['temp'];
+      condition = weatherData['weather'][0]['id'];
+      cityName = weatherData['name'];
+      weatherIcon = weatherModel.getWeatherIcon(condition);
+      weatherMessage = weatherModel.getMessage(temperature);
+    });
   }
 }
