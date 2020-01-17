@@ -7,10 +7,12 @@ class CityScreen extends StatefulWidget {
 }
 
 class _CityScreenState extends State<CityScreen> {
+  String cityName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        padding: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           image: DecorationImage(
               image: AssetImage('images/city_background.jpg'),
@@ -20,31 +22,46 @@ class _CityScreenState extends State<CityScreen> {
         child: SafeArea(
           child: Column(
             children: <Widget>[
-              Align(
-                alignment: Alignment.topLeft,
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(Icons.arrow_back_ios, size: 50),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20),
-                child: TextField(
-                  style: kTextFieldTextStyle,
-                  decoration: kTextFieldInputDecoration,
-                  onChanged: (value){},
-                ),
-              ),
-              FlatButton(
-                onPressed: () {},
-                child: Text('Get Weather', style: kButtonTextStyle),
-              ),
+              backIcon(context),
+              SizedBox(height: 10),
+              inputText(),
+              buttonBotton(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Align backIcon(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: FlatButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Icon(Icons.arrow_back_ios, size: 40),
+      ),
+    );
+  }
+
+  Container inputText() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: TextField(
+        style: kTextFieldTextStyle,
+        decoration: kTextFieldInputDecoration,
+        onChanged: (value) {
+          cityName = value;
+        },
+      ),
+    );
+  }
+
+  FlatButton buttonBotton() {
+    return FlatButton(
+      onPressed: () => Navigator.pop(context, cityName),
+      child: Text('Get Weather', style: kButtonTextStyle),
     );
   }
 }

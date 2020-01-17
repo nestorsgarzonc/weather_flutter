@@ -24,7 +24,7 @@ class _LocationScreenState extends State<LocationScreen> {
       weatherMessage = 'Unable to get location';
     } else {
       setState(() {
-        temperature = weatherData['main']['temp'];
+        temperature = weatherData['main']['temp'].round();
         condition = weatherData['weather'][0]['id'];
         cityName = weatherData['name'];
         weatherIcon = weatherModel.getWeatherIcon(condition);
@@ -65,15 +65,19 @@ class _LocationScreenState extends State<LocationScreen> {
                   FlatButton(
                     child: Icon(Icons.near_me, size: 50.0),
                     onPressed: () {
-                      setState(() {
-                        var weatherData = weatherModel.getLocationWeather();
+                      setState(() async{
+                        var weatherData = await weatherModel.getLocationWeather();
                         updateUI(weatherData);
                       });
                     },
                   ),
                   FlatButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'cityScreen');
+                    onPressed: () async {
+                      var typedName = await Navigator.pushNamed(context, 'cityScreen');
+                      if(typedName!=null){
+                        var weatherData= await weatherModel.getCityWeather(typedName);
+                        updateUI(weatherData);
+                      }
                     },
                     child: Icon(Icons.location_city, size: 50),
                   )
