@@ -1,4 +1,19 @@
+import 'package:weather_flutter/utilities/constants.dart';
+
+import 'location.dart';
+import 'networking.dart';
+
 class WeatherModel {
+  Future<dynamic> getLocationWeather() async {
+    final locationN = LocationWeather();
+    await locationN.getCurrentLocation();
+    var url =
+        '$openWeatherMapURL?lat=${locationN.latitude}&lon=${locationN.longitude}&appid=$apiKeyWeather&units=metric';
+    NetworkHelper networkHelper = NetworkHelper(url: url);
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';

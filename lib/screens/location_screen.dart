@@ -17,6 +17,22 @@ class _LocationScreenState extends State<LocationScreen> {
   String weatherIcon;
   String weatherMessage;
 
+  void updateUI(dynamic weatherData) {
+    if (weatherData == null) {
+      temperature = 0;
+      weatherIcon = '';
+      weatherMessage = 'Unable to get location';
+    } else {
+      setState(() {
+        temperature = weatherData['main']['temp'];
+        condition = weatherData['weather'][0]['id'];
+        cityName = weatherData['name'];
+        weatherIcon = weatherModel.getWeatherIcon(condition);
+        weatherMessage = weatherModel.getMessage(temperature);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,10 +64,17 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   FlatButton(
                     child: Icon(Icons.near_me, size: 50.0),
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        var weatherData = weatherModel.getLocationWeather();
+                        updateUI(weatherData);
+                      });
+                    },
                   ),
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'cityScreen');
+                    },
                     child: Icon(Icons.location_city, size: 50),
                   )
                 ],
@@ -78,15 +101,5 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
       ),
     );
-  }
-
-  void updateUI(dynamic weatherData) {
-    setState(() {
-      temperature = weatherData['main']['temp'];
-      condition = weatherData['weather'][0]['id'];
-      cityName = weatherData['name'];
-      weatherIcon = weatherModel.getWeatherIcon(condition);
-      weatherMessage = weatherModel.getMessage(temperature);
-    });
   }
 }

@@ -23,13 +23,19 @@ class _CityScreenState extends State<CityScreen> {
               Align(
                 alignment: Alignment.topLeft,
                 child: FlatButton(
-                  onPressed: () {},
-                  child: Icon(Icons.arrow_back, size: 50),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.arrow_back_ios, size: 50),
                 ),
               ),
               Container(
                 padding: EdgeInsets.all(20),
-                child: null,
+                child: TextField(
+                  style: kTextFieldTextStyle,
+                  decoration: kTextFieldInputDecoration,
+                  onChanged: (value){},
+                ),
               ),
               FlatButton(
                 onPressed: () {},

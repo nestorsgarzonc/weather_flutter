@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'cityScreen': (BuildContext context) => CityScreen(),
         'locationScreen': (BuildContext context) => LocationScreen(),
-        'loadingScreen': (BuildContext context) => LoadingScreen()
+        'loadingScreen': (BuildContext context) => LoadingScreen(),
       },
     );
   }
